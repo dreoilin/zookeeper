@@ -1,0 +1,103 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="1769790429" file="\\Fileshare1\Docs3\alberto.dicataldo\My Documents\MATLAB\gui_PANTHER\gui_PANTHER_instruments\Panther Instruments.prj" location="\\Fileshare1\Docs3\alberto.dicataldo\My Documents\MATLAB\gui_PANTHER\gui_PANTHER_instruments" name="Panther Instruments" target="target.mlapps" target-name="Package App">
+    <param.appname>Panther Instruments</param.appname>
+    <param.authnamewatermark>Alberto Dicataldo</param.authnamewatermark>
+    <param.email />
+    <param.company />
+    <param.icon>${PROJECT_ROOT}\Panther Instruments_resources\icon_24.png</param.icon>
+    <param.icons>
+      <file>${PROJECT_ROOT}\Panther Instruments_resources\icon_48.png</file>
+      <file>${PROJECT_ROOT}\Panther Instruments_resources\icon_24.png</file>
+      <file>${PROJECT_ROOT}\Panther Instruments_resources\icon_16.png</file>
+    </param.icons>
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.version>1.2</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>\\Fileshare1\Docs3\alberto.dicataldo\My Documents\MATLAB\gui_PANTHER\gui_PANTHER_instruments</param.output>
+    <param.guid>5b9c2a9c-62b2-4b42-b0e5-02076a5cf41c</param.guid>
+    <unset>
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\launch_GUI_instrument.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\instruments_connection.m</file>
+      <file>${PROJECT_ROOT}\MCCI icon.png</file>
+      <file>${PROJECT_ROOT}\PSU_channel_power.m</file>
+      <file>${PROJECT_ROOT}\PSU_initialize.m</file>
+      <file>${PROJECT_ROOT}\PSU_output_power.m</file>
+      <file>${PROJECT_ROOT}\PSU_VI_setting.m</file>
+      <file>${PROJECT_ROOT}\SMU_initialize.m</file>
+      <file>${PROJECT_ROOT}\SMU_output_power.m</file>
+      <file>${PROJECT_ROOT}\SMU_storage.m</file>
+      <file>${PROJECT_ROOT}\SMU_VI_setting.m</file>
+      <file>${PROJECT_ROOT}\VIN_frequency.m</file>
+      <file>${PROJECT_ROOT}\VIN_frequency_unit.m</file>
+      <file>${PROJECT_ROOT}\VIN_initialize.m</file>
+      <file>${PROJECT_ROOT}\VIN_NS_set_channel.m</file>
+      <file>${PROJECT_ROOT}\VIN_NS_set_output.m</file>
+      <file>${PROJECT_ROOT}\VIN_settings.m</file>
+      <file>${PROJECT_ROOT}\VIN_storage.m</file>
+      <file>${PROJECT_ROOT}\VIN_waveform.m</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="\\Fileshare1\Docs3\alberto.dicataldo\My Documents\MATLAB\gui_PANTHER" name="gui_PANTHER_instruments" optional="false">\\Fileshare1\Docs3\alberto.dicataldo\My Documents\MATLAB\gui_PANTHER\gui_PANTHER_instruments</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2016b</root>
+      <toolboxes>
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabcoder" />
+        <toolbox name="matlabhdlcoder" />
+      </toolboxes>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.1</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
