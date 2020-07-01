@@ -1,9 +1,10 @@
-# zookeeper
-A python program to communicate with IC lab equipment using PyVisa front-end
-and PyVisa-py backend.
+# Zookeeper
+A python program to automate IC testing using VISA to interface
+with the lab equipment.
 
-## Skippy
-The skippy class
+## Usage
+
+## SCPI
 
 ## Input Control
 
