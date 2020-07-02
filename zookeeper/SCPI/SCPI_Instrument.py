@@ -1,12 +1,26 @@
 import pyvisa as visa
+import string
+import logging
 
-COMMON_CMDS = [
-    ('reset', '*RST'),
-    ('init', 'INIT'),
-    ('clear', '*CLS')
-    ]
+ASCII = list(range(0, 255))
+LOC = list(range(0, 9))
 
-class Property(object):
+COMMON = {
+'CLS' : [None], # CLear Status (W) : reset STB, ESR
+'ESE' : [*ASCII, '?'], # Event Status Enable (0-255, ?) : arg->sets register, ?->queries register
+'ESR' : ['?'], # Event Status Read (?) : returns ES register and resets to 0
+'IDN' : ['?'], # IDenTification (?) : returns device ID
+'OPC' : [None, '?'], # OPeration Complete (W, ?) : W sets bit 0 ? writes 1 to output on completion
+'RST' : [None], # ReSeT (W) : sets to defined status
+'SRE' : [*ASCII], # Service Request Enable (0-255) : sets service request register
+'STB' : ['?'], # STatus Byte query (?) : returns status byte (decimal)
+'TST' : ['?'], # self TeST (?) : triggers selftests->0 no error
+'WAI' : [None], # WAIt to continue (W) : prevent servicing subsequent commands until all executed
+'SAV' : [*LOC], # SAV {0|1|2|3 ...} (0-9) : saves data to location
+'RCL' : [*LOC] # RCL {0|1|2 ...} (0-9) : recalls current instrument state
+}
+
+class Command(object):
     
     def __init__(self, instrument, attr):
         self.__instrument = instrument
@@ -17,7 +31,7 @@ class Property(object):
         Recursively construct the query or write directive
         by joining parts of the request with :
         """
-        return Property(
+        return Command(
             self.__instrument,
             ':'.join((self.attr, attr.upper()))
             )
@@ -73,12 +87,14 @@ class Instrument():
         """
         Dunder method to allow for pythonic commands
         """
-        # case 1 - common query
-        
-        # case 2 - common write
-        
+        # case 1 - common commands
+        if attr.upper() in COMMON.keys():
+            def common(*args):
+                return self.COMMON(attr.upper(), *args)
+            
+            return common
         # finally, just deal with it as device specific
-        return Property(self, attr)
+        return Command(self, attr)
     
     def __repr__(self):
         ret = []
@@ -91,6 +107,23 @@ class Instrument():
             ret.append(f"Manufacturer ID: {self.id}")
         return '\n'.join([r for r in ret])
     
+    def COMMON(self, command, key=None):
+        """
+        Deals with the common commands
+        """
+        if key not in COMMON[command]:
+            raise ValueError('Argument {key} not supported in common command')
+        else:
+            if key is None:
+                logging.debug("No key. CMD:\n *{command}")
+                return self.write(f"*{command}")
+            elif key == '?':
+                logging.debug(f"Query key. CMD: \n *{command}?")
+                return self.query(f"*{command}?")
+            elif string.isnumeric(key):
+                logging.debug(f"Numeric key. CMD: \n *{command} {key}")
+                return self.write(f"*{command} {key}") 
+        
     # getter and setter methods
     @property
     def backend(self):

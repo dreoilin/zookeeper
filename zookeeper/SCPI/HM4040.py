@@ -1,4 +1,8 @@
 from .SCPI_Instrument import Instrument
 
 class HM4040(Instrument):
-    pass
+    
+    
+    def change_channel(self, num=None):
+        
+        self.channel.select(num)
