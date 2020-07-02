@@ -10,7 +10,7 @@ with open('zookeeper/__version__.py') as version_file:
     
 extras_require  = {
     "USB" : ["pyusb>=1.0.2",
-             "libusb>=1.0"],
+             "libusb==1.0"],
     "ASRL" : ["pyserial>=3.4"],
     "SIM" : ["pyvisa-sim"]
     }
