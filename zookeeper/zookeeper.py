@@ -13,28 +13,28 @@ with a VISA device
 
 """
 import SCPI
-import pyvisa as visa
+# import pyvisa as visa
 import logging
 import sys
 
 # contains the device IDs
 DEVICES = ()
-backend = '@py'
+backend = '@sim'
 # setup logger
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG) 
 
 # find port from resource manager
-PSU = SCPI.Instrument(port='ASRL/dev/ttyUSB0::INSTR', backend=backend)
+PSU = SCPI.Instrument(port='ASRL2::INSTR', backend=backend)
 PSU.connect()
-print(PSU.STB())
+print(PSU.MEA.CURR.DC(0))
 print(PSU.id)
 input()
 PSU.disconnect()
 
-def setup_instruments(resource_manager=None):
-    
-    if resource_manager is None:
-        logging.critical("No resource manager specified")
-        raise ValueError
+def setup_instrument(port, ID=None):
+    pass
 
+def main(instruments, command=None):
+    pass
+    
     

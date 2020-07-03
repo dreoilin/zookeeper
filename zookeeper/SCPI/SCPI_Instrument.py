@@ -1,5 +1,4 @@
 import pyvisa as visa
-import string
 import logging
 
 ASCII = list(range(0, 255))
@@ -112,15 +111,15 @@ class Instrument():
         Deals with the common commands
         """
         if key not in COMMON[command]:
-            raise ValueError('Argument {key} not supported in common command')
+            raise ValueError(f'Argument {key} not supported in common command')
         else:
             if key is None:
-                logging.debug("No key. CMD:\n *{command}")
+                logging.debug(f"No key. CMD:\n *{command}")
                 return self.write(f"*{command}")
             elif key == '?':
                 logging.debug(f"Query key. CMD: \n *{command}?")
                 return self.query(f"*{command}?")
-            elif string.isnumeric(key):
+            elif str(key).isnumeric():
                 logging.debug(f"Numeric key. CMD: \n *{command} {key}")
                 return self.write(f"*{command} {key}") 
         
