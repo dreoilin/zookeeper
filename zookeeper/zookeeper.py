@@ -10,20 +10,20 @@ SCPI
 ~~~~~~~~
 The SCPI package allows for easy interfacing
 with a VISA device
-
+ASRL/dev/ttyUSB0::INSTR
 """
+import sys
+import logging
 from . import SCPI
+
 backend="@py"
+devices = {
+        'PSU' : "PORT" 
+        }
 
 
 def main():
-    print(f"BACKEND is {backend}")
-    # contains the device IDs
-    # DEVICES = ()
-    # find port from resource manager
-    #PSU = SCPI.Instrument(port='ASRL2::INSTR', backend=backend)
-    #PSU.connect()
-    #print(PSU.MEA.CURR.DC(0))
-    #print(PSU.id)
-    #input()
-    #PSU.disconnect()    
+    pass
+
+def setup():
+    pass
