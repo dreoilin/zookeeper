@@ -17,7 +17,7 @@ def _cli():
     (opt, remaining_args) = parser.parse_args()
     
     if opt.backend is not None:
-        zookeeper.backend
+        zookeeper.backend = opt.backend
     
     if len(remaining_args) != 0:
         print("Usage: python -m zookeeper [settings] \npython -m zookeeper -h for help")

@@ -23,7 +23,20 @@ devices = {
 
 
 def main():
-    pass
-
+    print(f"Backend is {backend}")
+    instruments = setup()
+    import IPython; IPython.embed()
+    
 def setup():
-    pass
+    import pyvisa as visa
+    devices = {}
+    rm = visa.ResourceManager(backend)
+    for port in rm.list_resources():
+        inst = SCPI.Instrument(port=port, backend=backend)
+        try:
+            inst.connect()
+            ID = inst.id
+            devices[port] = ID
+        except:
+            print("An exception occurred")
+    return devices
