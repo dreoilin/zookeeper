@@ -23,7 +23,6 @@ devices = {
 
 
 def main():
-    print(f"Backend is {backend}")
     instruments = setup()
     import IPython; IPython.embed()
     
@@ -38,5 +37,5 @@ def setup():
             ID = inst.id
             devices[port] = ID
         except:
-            print("An exception occurred")
+            logging.debug("Not a valid device")
     return devices

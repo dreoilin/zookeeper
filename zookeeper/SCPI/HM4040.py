@@ -2,7 +2,7 @@ from .SCPI_Instrument import Instrument
 import logging
 
 config = {
-    
+    'id' : 'HAMEG,HMP4040,026043549,HW50020001/SW2.50\n'
     
     }
 
