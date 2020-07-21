@@ -24,6 +24,8 @@ devices = {
 
 def main():
     instruments = setup()
+    
+    PSU = SCPI.HMP4040(port='ASRL/dev/ttyUSB0::INSTR')
     import IPython; IPython.embed()
     
 def setup():
