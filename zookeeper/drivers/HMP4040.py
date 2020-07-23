@@ -1,4 +1,4 @@
-from .VISA_Instrument import *
+from .SCPI.VISA_Instrument import VISA_Instrument
 import logging
 
 config = {

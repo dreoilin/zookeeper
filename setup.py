@@ -24,8 +24,9 @@ setup(
                   	"pyvisa>=1.10.1",
                   	"pyvisa-py>=0.4.1",
                   	"pyusb>=1.0.2",
-             		"libusb>=1.0"
-                  ],
+             		"libusb>=1.0",
+                        "python-vxi11>=0.9"
+                ],
       author="Cian O'Donnell",
       author_email="cian.odonnell@tyndall.ie",
       description="See README.md"
