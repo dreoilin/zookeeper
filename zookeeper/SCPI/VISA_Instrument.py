@@ -1,6 +1,6 @@
 import pyvisa as visa
 import logging
-from SCPI_Instrument import Instrument
+from .SCPI_Instrument import Instrument
 
 
 class VISA_Instrument(Instrument):
@@ -16,9 +16,9 @@ class VISA_Instrument(Instrument):
         """
         self.__backend = backend
         self.__rm = visa.ResourceManager(backend)
-        self.__instrument = None
         self.__port = port
         self.__resource_params = resource_params
+        self.__instrument = None
     
     def __del__(self):
         """
@@ -29,9 +29,6 @@ class VISA_Instrument(Instrument):
             
         del self.__instrument
         del self.__rm
-    
-    #def __getattr__(self, attr):
-    #   super().__getattr__(attr)
 
     def __repr__(self):
         ret = []
@@ -42,24 +39,7 @@ class VISA_Instrument(Instrument):
         if self.connected:
             ret.append(f"Instrument connected")
             ret.append(f"Manufacturer ID: {self.id}")
-        return '\n'.join([r for r in ret])
-    
-    def COMMON(self, command, key=None):
-        """
-        Deals with the common commands
-        """
-        if key not in COMMON[command]:
-            raise ValueError(f'Argument {key} not supported in common command')
-        else:
-            if key is None:
-                logging.debug(f"No key. CMD:\n *{command}")
-                return self.write(f"*{command}")
-            elif key == '?':
-                logging.debug(f"Query key. CMD: \n *{command}?")
-                return self.query(f"*{command}?")
-            elif str(key).isnumeric():
-                logging.debug(f"Numeric key. CMD: \n *{command} {key}")
-                return self.write(f"*{command} {key}") 
+        return '\n'.join([r for r in ret]) 
         
     # getter and setter methods
     @property
@@ -67,19 +47,8 @@ class VISA_Instrument(Instrument):
         return self.__backend
     
     @property
-    def instrument(self):
-        return self.__instrument
-    
-    @property
     def resource_params(self):
         return self.__resource_params
-    
-    @property
-    def id(self):
-        """
-        Queries the lab instrument for the manufacturer ID
-        """
-        return self.query('*IDN?')
     
     @property
     def port(self):

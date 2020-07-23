@@ -57,7 +57,7 @@ class Instrument():
     """
     
     def __init__(self):
-        pass
+        self.__instrument = None
  
     def __getattr__(self, attr):
         """
@@ -96,7 +96,9 @@ class Instrument():
         """
         return self.query('*IDN?')
     
-   
+    @property
+    def instrument(self):
+        return self.__instrument
     # Read, Write, and Read/Write (query) commands
             
     def write(self, msg):

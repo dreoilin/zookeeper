@@ -1,4 +1,4 @@
-from .SCPI_Instrument import Instrument
+from .VISA_Instrument import *
 import logging
 
 config = {
@@ -8,7 +8,7 @@ config = {
         'NCHANNELS' : 4
     }
 
-class HMP4040(Instrument):
+class HMP4040(VISA_Instrument):
     
     # in case we need to extend the functionality of the init 
     def __init__(self, port=None, backend=''):
