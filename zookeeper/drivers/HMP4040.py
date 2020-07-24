@@ -2,7 +2,7 @@ from .SCPI.VISA_Instrument import VISA_Instrument
 import logging
 
 config = {
-        'id' : 'HAMEG,HMP4040,026043549,HW50020001/SW2.50\n',
+        'id' : 'HAMEG,HMP4040,026043549,HW50020001/SW2.50',
         'voltage' : {'max' : 32.05, 'min' : 0.0},
         'current' : {'max' : 10.01, 'min' : 0.0},
         'NCHANNELS' : 4
@@ -13,7 +13,7 @@ class HMP4040(VISA_Instrument):
     # in case we need to extend the functionality of the init 
     def __init__(self, port=None, backend=''):
         # resource_params defined in config_dict
-        super().__init__(port=port, backend=backend, resource_params=config)
+        super().__init__(port=port, backend=backend, read_termination = '\n')
         # TODO! Should internally check if device is HM4040
         logging.info("HMP4040: Successfully instanciated")
     
@@ -49,7 +49,7 @@ class HMP4040(VISA_Instrument):
         """
         Queries the current device channel
         """
-        ret = int(self.INST.NSEL()[0])
+        ret = int(self.INST.NSEL())
         if self._synchronise():
             return ret
         else:
@@ -79,7 +79,7 @@ class HMP4040(VISA_Instrument):
         """
         Get channel voltage
         """
-        ret = float(self.VOLT()[:-1])
+        ret = float(self.VOLT())
         
         if self._synchronise():
             return ret
@@ -95,7 +95,7 @@ class HMP4040(VISA_Instrument):
         
         """
         if not config['voltage']['min'] < value < config['voltage']['max']:
-            loggin.warning(f"Specified voltage outside device bounds: {value}")
+            logging.warning(f"Specified voltage outside device bounds: {value}")
             return
         
         ret = self.VOLT(value)
@@ -110,7 +110,7 @@ class HMP4040(VISA_Instrument):
         """
         Get channel current
         """
-        ret = float(self.CURR()[:-1])
+        ret = float(self.CURR())
         
         if self._synchronise():
             return ret
@@ -125,7 +125,7 @@ class HMP4040(VISA_Instrument):
         between 0 [MIN] and 10.010 A [MAX]
         """
         if not config['current']['min'] < value < config['current']['max']:
-            loggin.warning(f"Specified current outside device bounds: {value}")
+            logging.warning(f"Specified current outside device bounds: {value}")
             return
         
         ret = self.CURR(value)
@@ -134,15 +134,3 @@ class HMP4040(VISA_Instrument):
             return ret
         else:
             return None
-        
-    def configure_channel(self, channel, voltage = None, current = None):
-        """
-        Convenient method to change channel and set voltage/current
-        """
-        # change the channel
-        if channel is not None:
-            self.channel = channel
-        if voltage is not None:
-            self.voltage = voltage
-        if current is not None:
-            self.current = current

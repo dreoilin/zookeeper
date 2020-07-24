@@ -1,5 +1,4 @@
 import pyvisa as visa
-import logging
 from .SCPI_Instrument import Instrument
 
 
@@ -39,6 +38,8 @@ class VISA_Instrument(Instrument):
         if self.connected:
             ret.append(f"Instrument connected")
             ret.append(f"Manufacturer ID: {self.id}")
+        else:
+            ret.append(f"Disconnected")
         return '\n'.join([r for r in ret]) 
         
     # getter and setter methods
