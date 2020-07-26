@@ -12,32 +12,28 @@ The SCPI package allows for easy interfacing
 with a VISA device
 ASRL/dev/ttyUSB0::INSTR
 """
+from os import path
 import sys
+import configparser
 import logging
-from . import SCPI
+from .drivers.KS33522B import KS33522B
+from .drivers.HMP4040 import HMP4040
 
 backend="@py"
-devices = {
-        'PSU' : "PORT" 
-        }
-
+configfile="devices.ini"
 
 def main():
-    instruments = setup()
-    
-    PSU = SCPI.HMP4040(port='ASRL/dev/ttyUSB0::INSTR')
-    import IPython; IPython.embed()
+    setup()
     
 def setup():
-    import pyvisa as visa
-    devices = {}
-    rm = visa.ResourceManager(backend)
-    for port in rm.list_resources():
-        inst = SCPI.Instrument(port=port, backend=backend)
-        try:
-            inst.connect()
-            ID = inst.id
-            devices[port] = ID
-        except:
-            logging.debug("Not a valid device")
-    return devices
+    instruments = []
+    basepath = path.dirname(__file__)
+    configpath = path.abspath(path.join(basepath, '..', configfile))
+    config = configparser.ConfigParser()
+    config.read(configpath)
+    # import IPython; IPython.embed()
+    for section in config.sections():
+        dev = config[section]['device']
+        port = config[section]['port']
+        inst = globals()[dev](port=port)
+        instruments.append(inst)

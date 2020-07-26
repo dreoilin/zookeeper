@@ -14,11 +14,18 @@ def _cli():
                       dest="backend", default=zookeeper.backend,
                       help=f"VISA backend. Defaults to `{zookeeper.backend}' ")
     
+    parser.add_option("-c", "--config", action="store", type="string",
+                    dest="configfile", default=zookeeper.configfile,
+                    help=f"Config file name. Must be placed in project root directory.\
+                            Defaults to `{zookeeper.configfile}' ")
+
     (opt, remaining_args) = parser.parse_args()
     
     if opt.backend is not None:
         zookeeper.backend = opt.backend
-    
+    if opt.configfile is not None:
+        zookeeper.configfile = opt.configfile
+
     if len(remaining_args) != 0:
         print("Usage: python -m zookeeper [settings] \npython -m zookeeper -h for help")
         sys.exit(1)
