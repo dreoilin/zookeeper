@@ -23,17 +23,20 @@ backend="@py"
 configfile="devices.ini"
 
 def main():
-    setup()
+    instruments = setup()
+    import IPython; IPython.embed()
     
 def setup():
-    instruments = []
+    instruments = {}
     basepath = path.dirname(__file__)
     configpath = path.abspath(path.join(basepath, '..', configfile))
     config = configparser.ConfigParser()
     config.read(configpath)
     # import IPython; IPython.embed()
-    for section in config.sections():
-        dev = config[section]['device']
-        port = config[section]['port']
+    for key in config.sections():
+        dev = config[key]['device']
+        port = config[key]['port']
         inst = globals()[dev](port=port)
-        instruments.append(inst)
+        instruments[key] = inst
+    
+    return instruments
