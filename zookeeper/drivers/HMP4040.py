@@ -22,12 +22,25 @@ class HMP4040(VISA_Instrument):
         ret = []
         ret.append(f"HMP4040 Power Supply")
         ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
-        ret.append(f"Port: {self.__port}")
+        ret.append(super().__repr__())
         if self.connected:
             ret.append(f"Instrument connected")
             ret.append(f"Manufacturer ID: {self.id}")
-            ret.append(f"Current channel: {self.channel}")
+            # ret.append(f"Current channel: {self.channel}")
         return '\n'.join([r for r in ret])
+    
+    def __repr__(self):
+        ret = []
+        ret.append(f"KS33522B Signal Generator")
+        ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
+        ret.append(super().__repr__())
+        if self.connected:
+            params = ["Function", "Frequency", "Amplitude", "DC Offset"]
+            config = re.split(r"[\ \,]", self.apply())
+            ret.extend([f"{k} :\t{v}".replace('"', '') for k,v in zip(params, config)])
+        
+        return '\n'.join([r for r in ret])
+    
     
     def _startup(self):
         self.CLS()

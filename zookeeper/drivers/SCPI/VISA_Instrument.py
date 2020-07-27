@@ -28,20 +28,21 @@ class VISA_Instrument(Instrument):
             
         del self.__instrument
         del self.__rm
+        
+    def __getattr__(self, attr):
+        return super().__getattr__(attr)
 
     def __repr__(self):
         ret = []
-        ret.append(f"SCPI (skippy) Instrument")
-        ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
-        ret.append(f"Backend: {self.__backend}")
-        ret.append(f"Port: {self.__port}")
+        # ret.append(f"Backend: {self.backend}")
+        ret.append(f"Port: {self.port}")
         if self.connected:
             ret.append(f"Instrument connected")
             ret.append(f"Manufacturer ID: {self.id}")
         else:
             ret.append(f"Disconnected")
         return '\n'.join([r for r in ret]) 
-        
+     
     # getter and setter methods
     @property
     def backend(self):
