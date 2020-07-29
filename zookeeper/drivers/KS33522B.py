@@ -8,7 +8,7 @@ import re
 #     }
 
 SIGNALS = [ # freq, amp, offset
-    'SINE',
+    'SINE', # TODO! fix signal send syntax
     'RAMP', # 100 % symmetry
     'SQUARE',
     'DC',
@@ -50,4 +50,6 @@ class KS33522B(VISA_Instrument):
                        kwargs.get('amp', 'DEF'),
                        kwargs.get('dc', 'DEF')]])
         
+        
+        print(f'APPLY:{attr} {arg}')
         return self.write(f'APPLY:{attr} {arg}')
