@@ -5,6 +5,7 @@ import collections
 from .drivers.KS33522B import KS33522B
 from .drivers.HMP4040 import HMP4040
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
+
 # safer than using globals()
 supported = {
     'KS33522B' : KS33522B,
@@ -20,7 +21,7 @@ class Workbench(collections.Mapping):
         self.__setup()
     
     def __repr__(self):
-        return '\n\n'.join([dev.__repr__() for dev in self.__instruments.values()])
+        return '\n\n'.join(['\n'.join([key ,self.__instruments[key].__repr__()]) for key in self.__instruments.keys()])
     
     def __setup(self):
         

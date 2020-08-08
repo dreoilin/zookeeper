@@ -25,8 +25,6 @@ class HMP4040(VISA_Instrument):
         ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
         ret.append(super().__repr__())
         if self.connected:
-            ret.append(f"Instrument connected")
-            ret.append(f"Manufacturer ID: {self.id}")
             ret.append(f"Current channel: {self.channel}")
             ret.append(f"Voltage: {self.voltage}")
             ret.append(f"Current: {self.current}")

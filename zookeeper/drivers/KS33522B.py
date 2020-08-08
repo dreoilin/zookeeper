@@ -8,7 +8,7 @@ import re
 #     }
 
 SIGNALS = [ # freq, amp, offset
-    'SINE', # TODO! fix signal send syntax
+    'SIN', # TODO! fix signal send syntax
     'RAMP', # 100 % symmetry
     'SQUARE',
     'DC',
