@@ -13,7 +13,7 @@ class HMP4040(VISA_Instrument):
     # in case we need to extend the functionality of the init 
     def __init__(self, port=None, backend=''):
         # resource_params defined in config_dict
-        super().__init__(port=port, backend=backend, read_termination = '\n', timeout=10)
+        super().__init__(port=port, backend=backend, read_termination = '\n')
         # TODO! Should internally check if device is HM4040
         logging.info("HMP4040: Successfully instanciated")
     
@@ -24,10 +24,10 @@ class HMP4040(VISA_Instrument):
         ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
         ret.append(super().__repr__())
         if self.connected:
-            for channel in range(1, config['NCHANNELS']+1):
-                ret.append(f"Channel: {self.channel}")
-                ret.append(f"Voltage: {self.voltage}")
-                ret.append(f"Current: {self.current}")
+            #for channel in range(1, config['NCHANNELS']+1):
+            ret.append(f"Channel: {self.channel}")
+            ret.append(f"Voltage: {self.voltage}")
+            ret.append(f"Current: {self.current}")
         return '\n'.join([r for r in ret])
 
     @property
@@ -69,7 +69,7 @@ class HMP4040(VISA_Instrument):
         """
         if not config['voltage']['min'] < value < config['voltage']['max']:
             raise ValueError(f"Specified voltage outside device bounds: {value} [V]")
-        if not (float(value)//(float(config['voltage']['step'])) % 1):
+        if (float(value)//(float(config['voltage']['step'])) % 1):
             raise ValueError("Specified discretisation not supported")
         
         return self.VOLT(value)
@@ -91,7 +91,7 @@ class HMP4040(VISA_Instrument):
         """
         if not config['current']['min'] < value < config['current']['max']:
             raise ValueError(f"Specified current outside device bounds: {value}")
-        if not (float(value)//(float(config['current']['step'])) % 1):
+        if (float(value)//(float(config['current']['step'])) % 1):
             raise ValueError("Specified discretisation not supported")
         
         return self.CURR(value)

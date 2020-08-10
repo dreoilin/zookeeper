@@ -1,5 +1,5 @@
 import logging
-from .props import cached_property
+# from .props import cached_property
 
 ASCII = list(range(0, 255))
 LOC = list(range(0, 9))
@@ -89,7 +89,7 @@ class Instrument():
                 logging.debug(f"Numeric key. CMD: \n *{command} {key}")
                 return self.write(f"*{command} {key}") 
    
-    @cached_property
+    @property
     def id(self):
         """
         Queries the lab instrument for the manufacturer ID
