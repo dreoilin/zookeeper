@@ -26,6 +26,7 @@ class Workbench(collections.Mapping):
     def __setup(self):
         
         self.__config.read(self.__configpath)
+        import IPython; IPython.embed()
         for devname in self.__config.sections():
             model = self.__config[devname]['device']
             port = self.__config[devname]['port']
@@ -36,7 +37,7 @@ class Workbench(collections.Mapping):
             try:
                 self.__instruments[devname] = inst
             except KeyError:
-                logging.warning(f"Device of same name `{key}' already exists. Change to another.")
+                logging.warning(f"Device of same name `{devname}' already exists. Change to another.")
     
     def __getitem__(self, key):
         return self.__instruments[key]
