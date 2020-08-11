@@ -30,6 +30,13 @@ class HMP4040(VISA_Instrument):
             ret.append(f"Current: {self.current}")
         return '\n'.join([r for r in ret])
 
+    def __getitem__(self, key : int):
+        if key in range(1, config['NCHANNELS']+1):
+            self.channel = key
+            return self
+        else:
+            raise ValueError("Specified channel not allowed: {config['NCHANNELS']} on device")
+
     @property
     def channel(self):
         """

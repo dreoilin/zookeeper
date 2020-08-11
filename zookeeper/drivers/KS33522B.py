@@ -3,19 +3,18 @@ import logging
 import re
 
 config = {
-     'id' : None,
-     'NCHANNELS' : 2    
-     }
+    'NCHANNELS' : 2
+    }
 
 SIGNALS = { # freq, amp, offset
-    'SIN' : ['frequency', 'amplitude', 'dc', 'phase'],
-    'RAMP': None, # 100 % symmetry
+    'SIN' : ['Frequency', 'Amplitude', 'DC', 'Phase'],
+    'RAMP': ['Frequency', 'Amplitude', 'DC', 'Phase', 'Symmetry'],
     #'SQUARE' : None,
     'DC' : ['DC'],
     #'NOISE',
     #'PRBS',
-    'PULSE' : None,
-    'TRIANGLE' : None # 50% symmetry
+    #'PULSE' : None,
+    # 'TRIANGLE' : None # 50% symmetry
     }
 
 class KS33522B(VISA_Instrument):
@@ -23,16 +22,21 @@ class KS33522B(VISA_Instrument):
         super().__init__(port=port, read_termination='\n')
         logging.info("KS33522B: Successfully instanciated")
         self.channel = 1
-    
+        
     def __repr__(self):
         ret = []
         ret.append("KS33522B Signal Generator")
         ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
         ret.append(super().__repr__())
         if self.connected:
-            params = ["Function", "Frequency", "Amplitude", "DC Offset"]
-            config = re.split(r"[\ \,]", self.apply())
-            ret.extend([f"{k} :\t{v}".replace('"', '') for k,v in zip(params, config)])
+            setup = []
+            for c in [1,2]:
+                ret.extend([f"Channel {c}", "~~~~~~~~~~~~"])
+                params = ["Function", "Frequency", "Amplitude", "DC"]
+                setup = re.split(r"[\ \,]", self.apply())
+                func = setup[0].replace('"', '')
+                ret.extend([f"{k} :\t{v}".replace('"', '') for k,v in zip(params, setup) if k in SIGNALS[func]])
+                ret.extend([f"Phase :\t{self.phase}"])
         
         return '\n'.join([r for r in ret])
         
@@ -43,6 +47,13 @@ class KS33522B(VISA_Instrument):
             return signal
         
         return super().__getattr__(attr)
+    
+    def __getitem__(self, key):
+        if key not in range(1, config['NCHANNELS']+1):
+            raise ValueError(f"KS33522B supports {config['NCHANNELS']} channels")
+        
+        self.channel = key
+        return self
     
     def SIGNAL(self, attr, **kwargs):
         '''
@@ -61,7 +72,7 @@ class KS33522B(VISA_Instrument):
             Variable dictionary of keywords specifying signal params
             
         '''
-        self.function = attr #(kwargs.get('freq', 'MIN'))
+        self.function = attr
         self.frequency = kwargs.get('freq', 'MIN')
         self.amplitude = kwargs.get('amp', 0)
         self.offset = kwargs.get('dc', 0)
@@ -180,6 +191,14 @@ class KS33522B(VISA_Instrument):
         
         return self.write(f"SOUR{self.channel}:FUNC {func}")
     
+    @property
+    def symmetry(self):
+        return self.query(f"SOUR{self.channel}:RAMP:SYMM?")
+    
+    @symmetry.setter
+    def symmetry(self, sym):
+        return self.write(f"SOUR{self.channel}:RAMP:SYMM {sym}")
+    
     # toggle controls
     def toggle(self):
         if self.query(f"OUTP{self.channel}?"):
@@ -194,3 +213,10 @@ class KS33522B(VISA_Instrument):
             self.write(f"SOUR{self.channel}:APPLY:DC 0,0,0")
         return super().disconnect()
     
+    @property
+    def coupled(self):
+        return self.query("VOLT:COUP?")
+    
+    @coupled.setter
+    def coupled(self, couple : bool):
+        return self.write(f"VOLT:COUP {int(couple)}")
