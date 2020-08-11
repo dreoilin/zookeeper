@@ -29,6 +29,13 @@ class HMP4040(VISA_Instrument):
             ret.append(f"Voltage: {self.voltage}")
             ret.append(f"Current: {self.current}")
         return '\n'.join([r for r in ret])
+    
+    def __getitem__(self, key):
+        if key not in range(1, config['NCHANNELS']+1):
+            raise ValueError(f"HMP4040 has {config['NCHANNELS']} channels")    
+        self.channel = key
+        return self
+
 
     def __getitem__(self, key : int):
         if key in range(1, config['NCHANNELS']+1):
