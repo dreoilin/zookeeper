@@ -199,9 +199,13 @@ class KS33522B(VISA_Instrument):
     def symmetry(self, sym):
         return self.write(f"SOUR{self.channel}:RAMP:SYMM {sym}")
     
-    # toggle controls
-    def toggle(self):
-        if self.query(f"OUTP{self.channel}?"):
+    @property
+    def display(self):
+        return self.query(f"OUTP{self.channel}?")
+    
+    @display.setter
+    def display(self):
+        if not self.display:
             return self.write(f"OUTP{self.channel} ON")
         else:
             return self.write(f"OUTP{self.channel} OFF")
