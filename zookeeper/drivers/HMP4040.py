@@ -3,8 +3,8 @@ import logging
 
 config = {
         'id' : 'HAMEG,HMP4040,026043549,HW50020001/SW2.50',
-        'voltage' : {'max' : 32.05, 'min' : 0.0, 'step' : 0.001},
-        'current' : {'max' : 10.01, 'min' : 0.0},
+        'voltage' : {'max' : 32.05, 'min' : 0.0, 'places' : 3},
+        'current' : {'max' : 10.01, 'min' : 0.0, 'places' : 3},
         'NCHANNELS' : 4
     }
 
@@ -35,7 +35,18 @@ class HMP4040(VISA_Instrument):
             raise ValueError(f"HMP4040 has {config['NCHANNELS']} channels")    
         self.channel = key
         return self
+    
+    def connect(self):
+        super().connect()
+        for i in range(1, config['NCHANNELS']+1):
+            self[i].voltage = 0
+            self[i].current = 0
 
+    def disconnect(self):
+        for i in range(1, config['NCHANNELS']+1):
+            self[i].voltage = 0
+            self[i].current = 0
+        super().disconnect()
 
     @property
     def channel(self):
@@ -74,12 +85,10 @@ class HMP4040(VISA_Instrument):
         between 0 [MIN] and 32.05 [MAX]
         
         """
-        if not config['voltage']['min'] < value < config['voltage']['max']:
+        if not config['voltage']['min'] <= value <= config['voltage']['max']:
             raise ValueError(f"Specified voltage outside device bounds: {value} [V]")
-        if (float(value)//(float(config['voltage']['step'])) % 1):
-            raise ValueError("Specified discretisation not supported")
         
-        return self.VOLT(value)
+        return self.VOLT(round(value, config['voltage']['places']))
         
     
     @property
@@ -96,9 +105,7 @@ class HMP4040(VISA_Instrument):
         Sets the current on the current channel to a value
         between 0 [MIN] and 10.010 A [MAX]
         """
-        if not config['current']['min'] < value < config['current']['max']:
+        if not config['current']['min'] <= value <= config['current']['max']:
             raise ValueError(f"Specified current outside device bounds: {value}")
-        if (float(value)//(float(config['current']['step'])) % 1):
-            raise ValueError("Specified discretisation not supported")
         
-        return self.CURR(value)
+        return self.CURR(round(value, config['current']['places']))
