@@ -23,7 +23,7 @@ class VISA_Instrument(Instrument):
         """
         Object cleanup
         """
-        if self.conected:
+        if self.connected:
             self.disconnect()
             
         del self.__instrument
@@ -144,4 +144,3 @@ class VISA_Instrument(Instrument):
             raise Exception( 'Can not query, instrument not connected' )
         
         return self.__instrument.query(msg)
-

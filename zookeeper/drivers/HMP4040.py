@@ -14,20 +14,23 @@ class HMP4040(VISA_Instrument):
     def __init__(self, port=None, backend=''):
         # resource_params defined in config_dict
         super().__init__(port=port, backend=backend, read_termination = '\n')
-        # TODO! Should internally check if device is HM4040
         logging.info("HMP4040: Successfully instanciated")
-    
-    # TODO! implement repr 
+     
     def __repr__(self):
         ret = []
         ret.append("HMP4040 Power Supply")
         ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
         ret.append(super().__repr__())
+        ch = self.channel
         if self.connected:
-            #for channel in range(1, config['NCHANNELS']+1):
-            ret.append(f"Channel: {self.channel}")
-            ret.append(f"Voltage: {self.voltage}")
-            ret.append(f"Current: {self.current}")
+            for channel in range(1, config['NCHANNELS']+1):
+                ret.append("~~~~~~~~~~~~~~~~~~~~~~~~")
+                ret.append(f"CH {self.channel}")
+                ret.append(f"Voltage: {self.voltage}")
+                ret.append(f"Current: {self.current}")
+        # return to original channel
+        self.channel = ch        
+        
         return '\n'.join([r for r in ret])
     
     def __getitem__(self, key):
@@ -47,6 +50,13 @@ class HMP4040(VISA_Instrument):
             self[i].voltage = 0
             self[i].current = 0
         super().disconnect()
+
+    def __getitem__(self, key : int):
+        if key in range(1, config['NCHANNELS']+1):
+            self.channel = key
+            return self
+        else:
+            raise ValueError("Specified channel not allowed: {config['NCHANNELS']} on device")
 
     @property
     def channel(self):
