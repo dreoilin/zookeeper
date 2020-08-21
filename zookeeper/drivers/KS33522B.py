@@ -92,31 +92,46 @@ class KS33522B(VISA_Instrument):
                                                       and basic security)
         """
         self.disp('OFF')
-        self.display(msg="Zookeeper: Running tests remotely")
-        
-    def display(self, msg = None, clear = False):
+        #self.display(msg="Zookeeper: Running tests remotely")
+    
+    def combine(self):
         """
-        Displays a user defined message on the signal generator display
-
+        Combines digital data two channels to create the output
+        signal on the output DAC for the base channel
+        
         Parameters
         ----------
-        msg : STR
-            Message to be displayed on signal generator display
-        
-        clear : BOOLEAN
-            Default : False -> scrubs the display
-        
-        Returns
-        -------
-        SUCCESS
-            returns a PyVisa success code
-
+        channel : int
+            target channel to combine with source channel
         """
-        
-        if clear is True:
-            return self.display.text.clear()
-        
-        return self.disp.text(f'"{msg}"')
+        return self.write(f"SOUR{self.channel}:COMB:FEED {channel}")
+    
+    # DATA subsystem
+    
+    
+#     def display(self, msg = None, clear = False):
+#         """
+#         Displays a user defined message on the signal generator display
+# 
+#         Parameters
+#         ----------
+#         msg : STR
+#             Message to be displayed on signal generator display
+#         
+#         clear : BOOLEAN
+#             Default : False -> scrubs the display
+#         
+#         Returns
+#         -------
+#         SUCCESS
+#             returns a PyVisa success code
+# 
+#         """
+#         
+#         if clear is True:
+#             return self.display.text.clear()
+#         
+#         return self.disp.text(f'"{msg}"')
     
     @property
     def channel(self):
@@ -129,7 +144,8 @@ class KS33522B(VISA_Instrument):
             
         self.__channel = channel
         
-    # frequency subsystem
+    # FREQ subsystem ###########################################
+    
     @property
     def frequency(self):
         return float(self.query(f"SOUR{self.channel}:FREQ?"))
