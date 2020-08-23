@@ -26,7 +26,6 @@ class Workbench(collections.Mapping):
     def __setup(self):
         
         self.__config.read(self.__configpath)
-        # import IPython; IPython.embed()
         for devname in self.__config.sections():
             model = self.__config[devname]['device']
             port = self.__config[devname]['port']
@@ -49,4 +48,9 @@ class Workbench(collections.Mapping):
         return iter(self.__instruments)
     
     def connect(self):
-        [device.connect() for device in self.__instruments.values()]
+        for device in self.__instruments.values():
+            device.connect()
+    
+    def disconnect(self):
+        for device in self.__instruemnts.values():
+            device.disconnect()

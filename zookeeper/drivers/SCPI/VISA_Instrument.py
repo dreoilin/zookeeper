@@ -144,3 +144,14 @@ class VISA_Instrument(Instrument):
             raise Exception( 'Can not query, instrument not connected' )
         
         return self.__instrument.query(msg)
+    
+    def bquery(self, msg):
+        '''
+        Performs a binary SCPI query.
+        msg : query write value
+        ret : read value from resource
+        '''
+        if self.__instrument is None:
+            raise Exception(' Can not write, instrument not connected ')
+            return
+        return self.__instrument.query_binary_values(msg, datatype='B', container=bytearray)
