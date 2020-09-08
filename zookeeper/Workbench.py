@@ -4,12 +4,14 @@ from os import path
 import collections
 from .drivers.KS33522B import KS33522B
 from .drivers.HMP4040 import HMP4040
+from .drivers.SMA100B import SMA100B
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 
 # safer than using globals()
 supported = {
     'KS33522B' : KS33522B,
-    'HMP4040'  : HMP4040
+    'HMP4040'  : HMP4040,
+    'SMA100B'  : SMA100B
     }
 
 class Workbench(collections.Mapping):
@@ -36,7 +38,7 @@ class Workbench(collections.Mapping):
             try:
                 self.__instruments[devname] = inst
             except KeyError:
-                logging.warning(f"Device of same name `{key}' already exists. Change to another.")
+                logging.warning(f"Device of same name `{devname}' already exists. Change to another.")
     
     def __getitem__(self, key):
         return self.__instruments[key]
@@ -48,4 +50,9 @@ class Workbench(collections.Mapping):
         return iter(self.__instruments)
     
     def connect(self):
-        [device.connect() for device in self.__instruments.values()]
+        for device in self.__instruments.values():
+            device.connect()
+    
+    def disconnect(self):
+        for device in self.__instruemnts.values():
+            device.disconnect()
