@@ -9,14 +9,8 @@ config = {
         'NCHANNELS' : 4
     }
 
-num2ONOFF = {
-        0 : 'OFF',
-        1 : 'ON'
-        }
-
 class HMP4040(VISA_Instrument): 
     def __init__(self, port=None, backend=''):
-        # resource_params defined in config_dict
         super().__init__(port=port, backend=backend, read_termination = '\n', timeout=None)
         logging.info("HMP4040: Successfully instanciated")
      
@@ -173,7 +167,7 @@ class HMP4040(VISA_Instrument):
            str:
             'ON' or 'OFF'
         """
-        return num2ONOFF.get(int(self.OUTP()))
+        return 'ON' if int(self.OUTP()) else 'OFF'
     
     @output.setter
     def output(self, key):

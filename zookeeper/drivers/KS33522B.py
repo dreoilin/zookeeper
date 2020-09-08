@@ -1,6 +1,7 @@
 from .SCPI.VISA_Instrument import VISA_Instrument
 import logging
 from PIL import Image
+from datetime import datetime
 import io
 import re
 
@@ -9,24 +10,24 @@ config = {
     }
 
 SIGNALS = { # freq, amp, offset
-    'SIN' : ['Frequency', 'Amplitude', 'DC', 'Phase'],
-    'RAMP': ['Frequency', 'Amplitude', 'DC', 'Phase', 'Symmetry'],
-    'SQUARE' : None,
-    'DC' : ['DC'],
-    'NOISE' : ['Bandwidth'],
-    'PRBS' : None,
-    'PULSE' : None,
+    'SIN' : ('Frequency', 'Amplitude', 'DC', 'Phase'),
+    'RAMP': ('Frequency', 'Amplitude', 'DC', 'Phase', 'Symmetry'),
+    'SQUARE' : ('Frequency', 'Amplitude', 'DC', 'Phase', 'DCYC'),
+    'DC' : ('DC'),
+    'NOISE' : ('Bandwidth'),
+    #'PRBS' : None,
+    #'PULSE' : None,
     'TRIANGLE' : None # 50% symmetry
     }
 
-MODULATION = [
-    'AM',
-    'BPSK',
-    'FM',
-    'FSK',
-    'PM',
-    'PWM'
-    ]
+MODULATION = {
+    'AM' : ('Frequency'),
+    'BPSK' : ('Rate'),
+    'FM' : ('Frequency', 'Deviation'),
+    'FSK' : ('Frequency', 'Rate'),
+    'PM' : ('Frequency', 'Deviation'),
+    'PWM' : ('Deviation')
+    }
 
 class KS33522B(VISA_Instrument):
     def __init__(self, port = None):
@@ -97,16 +98,16 @@ class KS33522B(VISA_Instrument):
             self.symmetry = kwargs.get('sym', 0)
         if 'Bandwidth' in SIGNALS[func]:
             self.bandwidth = kwargs.get('bandwidth', 'MIN')
+        if 'DCYC' in SIGNALS[func]:
+            self.dcycle = kwargs.get('DCYC', 'MIN')
         
     def MODULATION(self, modtype, **kwargs):
-    
         source = kwargs.get('source', 'INT')
         self.write(f"SOUR{self.channel}:{modtype}:SOUR {source}")
         if source is 'INT':
-            if modtype in ['AM', 'FM', 'FSK', 'PM']:
-                # set mod frequency
+            if 'Frequency' in MODULATION[modtype]:
                 freq = kwargs.get('freq', 1e3)
-                self.write(f"SOUR{self.channel}:{modtype}:INT:FREQ {freq}")
+                self.write(f"SOUR{self.channel}:{modtype}:INT:FREQ {freq}")     
             if modtype is 'AM':
                 self.DSSC = 'ON' if kwargs.get('DSSC', False) else 'OFF'
                 # set source function
@@ -119,11 +120,11 @@ class KS33522B(VISA_Instrument):
                 # set BPSK phase
                 phase = kwargs.get('phase', 0)
                 self.write(f"SOUR{self.channel}:{modtype}:PHAS {phase}")
-            if modtype in ['BPSK', 'FSK']:
+            if 'Rate' in MODULATION[modtype]:
                 # set rate
                 rate = kwargs.get('rate', 10)
                 self.write(f"SOUR{self.channel}:{modtype}:INT:RATE {rate}")
-            if modtype in ['FM', 'PM', 'PWM']:
+            if 'Deviation' in MODULATION[modtype]:
                 # set deviation
                 dev = kwargs.get('deviation', 10)
                 self.write(f"SOUR{self.channel}:{modtype}:DEV {dev}")
@@ -131,8 +132,9 @@ class KS33522B(VISA_Instrument):
                 self.PWMDCYCLE = kwargs.get('dcycle', 1)
                 
         # turn on modulation
-        return self.write(f"SOUR{self.channel}:{modtype}:STATE ON")
-        
+        state = kwargs.get('state', 'OFF')
+        return self.write(f"SOUR{self.channel}:{modtype}:STATE {state}")
+    
     def connect(self):
         super().connect()
         logging.info("KS33522B: performing startup procedure")
@@ -146,6 +148,14 @@ class KS33522B(VISA_Instrument):
         for i in [1, 2]:
             self[i].output = 'OFF'
         return
+    
+    @property
+    def dcycle(self):
+        return self.query(f'SOUR{self.channel}:FUNC:SQU:DCYC?')
+    
+    @dcycle.setter
+    def dcycle(self, value):
+        return self.write(f'SOUR{self.channel}:FUNC:SQU:DCYC {value}')
     
     # AM SUBSYSTEM ##############     
     @property
@@ -161,9 +171,7 @@ class KS33522B(VISA_Instrument):
         if key not in ['ON', 'OFF', 1, 0]:
             raise ValueError(f"Key >>{key}<< not valid. Specify 'ON', 'OFF', 1, 0")
         return self.write(f"SOUR{self.channel}:AM:DSSC {key}")
-    
-    #############################
-    # PWM SUBSYSTEM ############
+
     @property
     def PWMDCYCLE(self):
         return self.query(f"SOUR{self.channel}PWM:DEV:DCYC?")
@@ -173,7 +181,7 @@ class KS33522B(VISA_Instrument):
         return self.write(f"SOUR{self.channel}:PWM:DEV:DCYC {value}")
     
     #############################
-    def combine(self):
+    def combine(self, channel):
         """
         Combines digital data two channels to create the output
         signal on the output DAC for the base channel
@@ -186,12 +194,7 @@ class KS33522B(VISA_Instrument):
         return self.write(f"SOUR{self.channel}:COMB:FEED {channel}")
     
     #########################
-    # DATA subsystem ########
-    
-    
-    #########################
-    
-    
+    # DAT
     
     @property
     def channel(self):
@@ -214,8 +217,6 @@ class KS33522B(VISA_Instrument):
     @frequency.setter
     def frequency(self, frequency):
         return self.write(f"SOUR{self.channel}:FREQ {frequency}")
-    
-    
     
     #################################
     # OSCILLATOR subsystem ##########
@@ -277,12 +278,6 @@ class KS33522B(VISA_Instrument):
         return self.write(f"SOUR{self.channel}:TRAC {key}")
     
     ################################
-    # TRIGGER subsystem ############
-    
-    #def trigger(self, )
-    ################################
-    
-    ################################
     # UNIT subsystem
     @property
     def angle(self):
@@ -342,6 +337,24 @@ class KS33522B(VISA_Instrument):
         '''
         return self.write(f"SOUR{self.channel}:PHASE:SYNC")
     #################################################################
+    # TRIG subsystem
+    
+    def trigger(self, delay = None, count = None, source = None):
+        if delay is not None:
+            self.write(f"TRIG{self.channel}:DEL {delay}")
+        if count is not None:
+            self.write(f"TRIG{self.channel}:COUN {count}")
+        if slope is not None:
+            if slope.upper() not in ('POS', 'NEG'):
+                raise ValueError(f'SLOPE cannot be >>{slope}<<')
+            self.write(f"TRIG{self.channel}:SLOP {slope}")
+        if source is not None:
+            if source.upper() not in ('IMM', 'EXT', 'TIM', 'BUS'):
+                raise ValueError("Source >>{source}<< not allowed")
+            return self.write(f"TRIG{self.channel}:SOUR {source}")
+        else:
+            return self.write(f"TRIG{self.channel}")
+    
     @property
     def function(self):
         return self.query(f"SOUR{self.channel}:FUNC?")
@@ -367,7 +380,7 @@ class KS33522B(VISA_Instrument):
     
     @bandwidth.setter
     def bandwidth(self, value):
-        if not in ['MIN', 'MAX'] and not 1e-3 <= value <= 3e7:
+        if value not in ['MIN', 'MAX'] and not 1e-3 <= value <= 3e7:
             raise ValueError(f"Noise bandwidth >>{value}<< not supported\nMust be between 1e-3 and 3e7 or one of MIN, MAX")
         return self.write(f"SOUR{self.channel}:FUNC:NOIS:BAND {value}")
     
@@ -397,7 +410,9 @@ class KS33522B(VISA_Instrument):
             self[c].output = 'OFF'
         return super().disconnect()
     
-    def screenshot(self):
+    def screenshot(self, filename=None):
+        if filename is None:
+            filename = f'sshot_{datetime.now().strftime("%d-%m-%Y_%H:%M:%S")}'
         byte_data = self.bquery(f"HCOP:SDUM:DATA?")
         img = Image.open(io.BytesIO(byte_data))
-        img.save('sshot.PNG')
+        img.save(f'{filename}.PNG')
