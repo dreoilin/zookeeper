@@ -3,7 +3,7 @@ import logging
 from time import sleep
 
 MEASURE = {
-        'VOLTAGE' : ('AC', 'DC'),
+        'VOLT' : ('AC', 'DC'),
         'CAP' : (None),
         'CURR' : ('AC', 'DC'),
         'DIOD' : (None),
@@ -36,10 +36,12 @@ class AGI34410A_MM(VISA_Instrument):
     def MEASURE(self, func, *args):
         if len(args) > 0:
             meas = ":" + args.pop().upper()
+            print(f"Args are: {args}")
         else:
             meas = ""
         if meas in MEASURE[func]:
-            return self.query(f"MEAS:{func}{meas}?")
+            print(f"MEAS:{func}{meas}?")
+            #return self.query(f"MEAS:{func}{meas}?")
         else:
             logging.error("Measurement type {meas} not found.")
             return None
