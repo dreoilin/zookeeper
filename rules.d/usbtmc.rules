@@ -1,0 +1,6 @@
+DRIVERS="usbtmc", GROUP="users", MODE="0660"
+
+SUBSYSTEM!="usb_device", ACTION!="add", GOTO="usbtmc_rules_end"
+SYSFS{idVendor}=="0957", SYSFS{idProduct}=="1507"
+MODE="0660", GROUP="plugdev"
+LABEL="usbtmc_rules_end"
