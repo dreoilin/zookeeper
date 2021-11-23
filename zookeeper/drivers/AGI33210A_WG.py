@@ -215,5 +215,5 @@ class AGI33210A_WG(VISA_Instrument):
         
     # disconnect procedures
     def disconnect(self):
-        self[c].output = 'OFF'
+        self.output = 'OFF'
         return super().disconnect()

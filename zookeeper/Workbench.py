@@ -5,13 +5,20 @@ import collections
 from .drivers.KS33522B import KS33522B
 from .drivers.HMP4040 import HMP4040
 from .drivers.SMA100B import SMA100B
+from .drivers.AGI33210A_WG import AGI33210A_WG
+from .drivers.AGI34410A_MM import AGI34410A_MM
+from .drivers.AGIE3633A_PS import AGIE3633A_PS
+from .drivers.DSP7265_LIA import DSP7265_LIA
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 
 # safer than using globals()
 supported = {
     'KS33522B' : KS33522B,
     'HMP4040'  : HMP4040,
-    'SMA100B'  : SMA100B
+    'SMA100B'  : SMA100B,
+    'AGI33210A_WG' : AGI33210A_WG,
+    'AGIE3633A_PS' : AGIE3633A_PS,
+    'DSP7265_LIA' : DSP7265_LIA
     }
 
 class Workbench(collections.Mapping):
@@ -54,5 +61,5 @@ class Workbench(collections.Mapping):
             device.connect()
     
     def disconnect(self):
-        for device in self.__instruemnts.values():
+        for device in self.__instruments.values():
             device.disconnect()

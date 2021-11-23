@@ -21,5 +21,4 @@ configfile="devices.ini"
 
 def main():
     mybench = Workbench(configfile)
-    import IPython; IPython.embed()
     return mybench
