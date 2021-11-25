@@ -1,10 +1,10 @@
-# ZooKeeper
-A python program to automate lab equipment using PyVisa
+# Zookeeper
+A python module to automate MCCI lab equipment using PyVisa
 
 ## Installing
 You can install ZooKeeper using standard pip install:
 
-`pip3 install .`
+`pip install .`
 
 in the root directory
 
