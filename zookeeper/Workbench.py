@@ -23,8 +23,7 @@ supported = {
 
 class Workbench(collections.Mapping):
     def __init__(self, configfile='devices.ini'):
-        basepath = path.dirname(__file__)
-        self.__configpath = path.abspath(path.join(basepath, '..', configfile))
+        self.__configpath = configfile
         self.__config = configparser.ConfigParser()
         self.__instruments = {}
         self.__setup()
