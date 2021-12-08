@@ -9,6 +9,7 @@ from .drivers.AGI33210A_WG import AGI33210A_WG
 from .drivers.AGI34410A_MM import AGI34410A_MM
 from .drivers.AGIE3633A_PS import AGIE3633A_PS
 from .drivers.DSP7265_LIA import DSP7265_LIA
+from .drivers.KEPCO_BPS import KEPCO_BPS
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 
 # safer than using globals()
@@ -18,7 +19,8 @@ supported = {
     'SMA100B'  : SMA100B,
     'AGI33210A_WG' : AGI33210A_WG,
     'AGIE3633A_PS' : AGIE3633A_PS,
-    'DSP7265_LIA' : DSP7265_LIA
+    'DSP7265_LIA' : DSP7265_LIA,
+    'KEPCO_BPS' : KEPCO_BPS
     }
 
 class Workbench(collections.Mapping):
