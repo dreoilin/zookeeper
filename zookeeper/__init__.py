@@ -8,6 +8,7 @@ from .drivers.AGIE3633A_PS import AGIE3633A_PS
 from .drivers.DSP7265_LIA import DSP7265_LIA
 from .drivers.TPS2014B_OSC import TPS2014B_OSC
 from .drivers.KEPCO_BPS import KEPCO_BPS
+from .drivers.SRS_LIA import SRS_LIA
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 from .__version__ import __version__
 

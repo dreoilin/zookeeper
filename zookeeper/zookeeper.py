@@ -3,7 +3,6 @@ ZooKeeper
 ~~~~~~~~~
 
 This is the entry point for the program.
-
 I've just used a script (for now)
 
 SCPI

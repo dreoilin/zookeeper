@@ -144,7 +144,17 @@ class VISA_Instrument(Instrument):
             raise Exception( 'Can not query, instrument not connected' )
         
         return self.__instrument.query(msg)
-    
+
+    def query_ascii_values(self, msg, **kwargs):
+        '''
+        Performs an ASCII SCPI query.
+        msg : query write value
+        '''
+        if self.__instrument is None:
+            raise Exception(' Can not write, instrument not connected ')
+            return
+        return self.__instrument.query_ascii_values(msg, **kwargs)
+
     def bquery(self, msg):
         '''
         Performs a binary SCPI query.
