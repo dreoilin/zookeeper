@@ -1,5 +1,3 @@
-![Screenshot](logo.jpg)
-
 # Zookeeper
 A python module to automate MCCI lab equipment using PyVisa
 
