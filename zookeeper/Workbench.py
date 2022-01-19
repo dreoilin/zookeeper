@@ -12,6 +12,7 @@ from .drivers.DSP7265_LIA import DSP7265_LIA
 from .drivers.TPS2014B_OSC import TPS2014B_OSC
 from .drivers.KEPCO_BPS import KEPCO_BPS
 from .drivers.SRS_LIA import SRS_LIA
+from .drivers.AnalogDiscovery2 import *
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 
 # safer than using globals()
