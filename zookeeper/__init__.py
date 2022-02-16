@@ -11,6 +11,7 @@ from .drivers.KEPCO_BPS import KEPCO_BPS
 from .drivers.SRS_LIA import SRS_LIA
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 from .drivers.AnalogDiscovery2 import *
+from .drivers.E4980_LCR import *
 from .__version__ import __version__
 
 __all__ = ['main', 'Workbench', 'HMP4040', 'KS33522B', 'VISA_Instrument']

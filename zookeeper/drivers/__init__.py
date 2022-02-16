@@ -10,4 +10,5 @@ from .DSP7265_LIA import *;
 from .TPS2014B_OSC import *;
 from .KEPCO_BPS import *;
 from .SRS_LIA import *;
+from .E4980_LCR import *;
 from .AnalogDiscovery2 import *;
