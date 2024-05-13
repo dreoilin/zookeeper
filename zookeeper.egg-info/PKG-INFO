@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: zookeeper
+Version: 0.1
+Summary: See README.md
+Author: Cian O'Donnell
+Author-email: cian.odonnell@tyndall.ie
+Requires-Dist: pyvisa>=1.10.1
+Requires-Dist: pyvisa-py>=0.4.1
+Requires-Dist: python-vxi11>=0.9
+Provides-Extra: usb
+Requires-Dist: pyusb>=1.0.2; extra == "usb"
+Requires-Dist: libusb==1.0; extra == "usb"
+Provides-Extra: asrl
+Requires-Dist: pyserial>=3.4; extra == "asrl"
+Provides-Extra: sim
+Requires-Dist: pyvisa-sim; extra == "sim"

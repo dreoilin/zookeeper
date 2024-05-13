@@ -1,0 +1,13 @@
+pyvisa>=1.10.1
+pyvisa-py>=0.4.1
+python-vxi11>=0.9
+
+[ASRL]
+pyserial>=3.4
+
+[SIM]
+pyvisa-sim
+
+[USB]
+pyusb>=1.0.2
+libusb==1.0

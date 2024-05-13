@@ -14,7 +14,6 @@ from .drivers.KEPCO_BPS import KEPCO_BPS
 from .drivers.SRS_LIA import SRS_LIA
 from .drivers.AnalogDiscovery2 import *
 from .drivers.E4980_LCR import *
-from .drivers.RS_VNA import *
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 
 # safer than using globals()
@@ -28,8 +27,7 @@ supported = {
     'KEPCO_BPS' : KEPCO_BPS,
     'TPS2014B_OSC' : TPS2014B_OSC,
     'SRS_LIA' : SRS_LIA,
-    'E4980_LCR' : E4980_LCR,
-    'RS_VNA' : RS_VNA
+    'E4980_LCR' : E4980_LCR
     }
 
 class Workbench(collections.Mapping):
