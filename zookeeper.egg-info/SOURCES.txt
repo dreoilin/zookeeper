@@ -20,6 +20,7 @@ zookeeper/drivers/HMP4040.py
 zookeeper/drivers/KEPCO_BPS.py
 zookeeper/drivers/KS33522B.py
 zookeeper/drivers/KSMSO.py
+zookeeper/drivers/RS_VNA.py
 zookeeper/drivers/SMA100B.py
 zookeeper/drivers/SRS_LIA.py
 zookeeper/drivers/TPS2014B_OSC.py

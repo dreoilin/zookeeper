@@ -15,6 +15,7 @@ from .drivers.SRS_LIA import SRS_LIA
 from .drivers.AnalogDiscovery2 import *
 from .drivers.E4980_LCR import *
 from .drivers.RS_VNA import *
+from .drivers.AMAXDAQ1 import *
 from .drivers.SCPI.VISA_Instrument import VISA_Instrument
 
 # safer than using globals()

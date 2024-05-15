@@ -12,3 +12,4 @@ from .KEPCO_BPS import *;
 from .SRS_LIA import *;
 from .E4980_LCR import *;
 from .AnalogDiscovery2 import *;
+from AMAXDAQ1 import *;
