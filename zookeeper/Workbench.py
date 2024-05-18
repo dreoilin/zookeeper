@@ -1,7 +1,7 @@
 import logging
 import configparser
 from os import path
-import collections
+from collections.abc import Mapping
 from .drivers.KS33522B import KS33522B
 from .drivers.HMP4040 import HMP4040
 from .drivers.SMA100B import SMA100B
@@ -33,7 +33,7 @@ supported = {
     'RS_VNA' : RS_VNA
     }
 
-class Workbench(collections.Mapping):
+class Workbench(Mapping):
     def __init__(self, configfile='devices.ini'):
         self.__configpath = configfile
         self.__config = configparser.ConfigParser()

@@ -8,7 +8,7 @@
 """
 
 from ctypes import *
-from dwfconstants import *
+#from dwfconstants import *
 import math
 import time
 import sys

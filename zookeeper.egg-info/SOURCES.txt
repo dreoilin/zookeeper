@@ -13,6 +13,7 @@ zookeeper.egg-info/top_level.txt
 zookeeper/drivers/AGI33210A_WG.py
 zookeeper/drivers/AGI34410A_MM.py
 zookeeper/drivers/AGIE3633A_PS.py
+zookeeper/drivers/AMAXDAQ1.py
 zookeeper/drivers/AnalogDiscovery2.py
 zookeeper/drivers/DSP7265_LIA.py
 zookeeper/drivers/E4980_LCR.py
